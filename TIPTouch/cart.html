@@ -27,7 +27,7 @@
                     <div>
                         <a href="#" class="flex items-center py-4 px-2">
                             <i data-feather="book-open" class="h-8 w-8 text-yellow-400 mr-2"></i>
-                            <span class="font-semibold text-white text-lg">SchoolSupplies</span>
+                            <span class="font-semibold text-white text-lg">TIP Touch</span>
                         </a>
                     </div>
                 </div>
@@ -67,7 +67,6 @@
                             <h2 class="text-xl font-semibold">Items (<span id="item-count">0</span>)</h2>
                         </div>
                         <div id="cart-items" class="divide-y divide-black">
-                            <!-- Cart items will be dynamically inserted here -->
                             <div class="p-6 text-center" id="empty-cart-message">
                                 <i data-feather="shopping-cart" class="w-12 h-12 mx-auto text-gray-400 mb-4"></i>
                                 <h3 class="text-lg font-medium text-gray-900 mb-2">Your cart is empty</h3>
@@ -91,12 +90,8 @@
                                 <span class="text-gray-600">Subtotal</span>
                                 <span id="subtotal">$0.00</span>
                             </div>
-                            <div class="flex justify-between mb-2">
-                                <span class="text-gray-600">Shipping</span>
-                                <span id="shipping">$0.00</span>
-                            </div>
                             <div class="flex justify-between mb-4">
-                                <span class="text-gray-600">Tax</span>
+                                <span class="text-gray-600">Tax (8%)</span>
                                 <span id="tax">$0.00</span>
                             </div>
                             <div class="border-t border-gray-200 pt-4 mb-6">
@@ -137,9 +132,7 @@
                 </div>
                 <div class="border-t border-gray-200 pt-4 mb-6">
                     <h3 class="font-semibold mb-2">Order Summary</h3>
-                    <div id="receipt-items" class="mb-4">
-                        <!-- Receipt items will be dynamically inserted here -->
-                    </div>
+                    <div id="receipt-items" class="mb-4"></div>
                     <div class="flex justify-between font-semibold text-lg">
                         <span>Total</span>
                         <span id="receipt-total">$0.00</span>
@@ -189,6 +182,22 @@
                             <i data-feather="instagram" class="w-5 h-5"></i>
                         </a>
                     </div>
+                    <!-- Chat Box -->
+                    <div class="relative">
+                        <button id="chat-toggle" class="bg-yellow-400 text-black font-semibold px-4 py-2 rounded-lg hover:bg-yellow-300 transition duration-300">
+                             Chat with us
+                        </button>
+                        <div id="chat-box" class="hidden absolute bottom-16 right-0 w-72 bg-white text-black rounded-xl shadow-lg p-4">
+                            <div class="flex justify-between items-center border-b pb-2 mb-2">
+                                <h4 class="font-bold text-lg">Customer Support</h4>
+                                <button id="chat-close" class="text-gray-500 hover:text-black">&times;</button>
+                            </div>
+                            <div class="flex">
+                                <input id="chat-input" type="text" placeholder="Type a message..." class="flex-1 border border-gray-300 rounded-l-lg p-2 focus:outline-none">
+                                <button id="chat-send" class="bg-yellow-400 text-black px-3 rounded-r-lg">Send</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -197,7 +206,6 @@
     <script>
         feather.replace();
         
-        // Cart functionality
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         
         function updateCartDisplay() {
@@ -255,11 +263,9 @@
         
         function updateQuantity(index, change) {
             cart[index].quantity += change;
-            
             if (cart[index].quantity <= 0) {
                 cart.splice(index, 1);
             }
-            
             saveCart();
         }
         
@@ -270,13 +276,12 @@
         
         function updateTotals() {
             const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const shipping = subtotal > 0 ? (subtotal > 50 ? 0 : 5.99) : 0;
-            const tax = subtotal * 0.08; // 8% tax
+            const tax = subtotal * 0.08;
+            const total = subtotal + tax;
             
             document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
-            document.getElementById('shipping').textContent = `$${shipping.toFixed(2)}`;
             document.getElementById('tax').textContent = `$${tax.toFixed(2)}`;
-            document.getElementById('total').textContent = `$${(subtotal + shipping + tax).toFixed(2)}`;
+            document.getElementById('total').textContent = `$${total.toFixed(2)}`;
             updateCartCount();
         }
         
@@ -297,9 +302,8 @@
             document.getElementById('order-number').textContent = orderNumber.toString().padStart(4, '0');
             
             const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const shipping = subtotal > 0 ? (subtotal > 50 ? 0 : 5.99) : 0;
             const tax = subtotal * 0.08;
-            const total = subtotal + shipping + tax;
+            const total = subtotal + tax;
             
             document.getElementById('receipt-total').textContent = `$${total.toFixed(2)}`;
             
@@ -314,17 +318,8 @@
                 receiptItemsContainer.appendChild(itemElement);
             });
             
-            // Add shipping and tax to receipt
-            const shippingElement = document.createElement('div');
-            shippingElement.className = 'flex justify-between py-1 border-t border-gray-200 mt-2 pt-2';
-            shippingElement.innerHTML = `
-                <span>Shipping</span>
-                <span>$${shipping.toFixed(2)}</span>
-            `;
-            receiptItemsContainer.appendChild(shippingElement);
-            
             const taxElement = document.createElement('div');
-            taxElement.className = 'flex justify-between py-1';
+            taxElement.className = 'flex justify-between py-1 border-t border-gray-200 mt-2 pt-2';
             taxElement.innerHTML = `
                 <span>Tax (8%)</span>
                 <span>$${tax.toFixed(2)}</span>
@@ -340,7 +335,6 @@
             saveCart();
         }
         
-        // Initialize cart display
         document.getElementById('checkout-btn').addEventListener('click', showReceipt);
         updateCartDisplay();
     </script>
