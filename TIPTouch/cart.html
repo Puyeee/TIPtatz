@@ -1,8 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cart - TIP Touch</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/feather-icons"></script>
@@ -141,7 +139,7 @@
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
                 <div>
-                    <h3 class="text-xl font-bold mb-4">SchoolSupplies</h3>
+                    <h3 class="text-xl font-bold mb-4">TIP Touch</h3>
                     <p class="text-gray-400">Your one-stop shop for all school essentials.</p>
                 </div>
                 <div>
@@ -174,14 +172,17 @@
                         </a>
                     </div>
                     <!-- Chat Box -->
-                    <div class="relative">
-                        <button id="chat-toggle" class="bg-yellow-400 text-black font-semibold px-4 py-2 rounded-lg hover:bg-yellow-300 transition duration-300">
+                     <div class="relative">
+                        <button id="chat-toggle" class="bg-yellow-400 text-black font-semibold px-4 py-2 rounded-lg hover:bg-yellow-100 transition duration-300">
                              Chat with us
                         </button>
                         <div id="chat-box" class="hidden absolute bottom-16 right-0 w-72 bg-white text-black rounded-xl shadow-lg p-4">
                             <div class="flex justify-between items-center border-b pb-2 mb-2">
                                 <h4 class="font-bold text-lg">Customer Support</h4>
                                 <button id="chat-close" class="text-gray-500 hover:text-black">&times;</button>
+                            </div>
+                            <div id="chat-messages" class="h-40 overflow-y-auto mb-3 text-sm">
+                                <p class="text-gray-600 mb-2">👋 Hi there! How can we help you today?</p>
                             </div>
                             <div class="flex">
                                 <input id="chat-input" type="text" placeholder="Type a message..." class="flex-1 border border-gray-300 rounded-l-lg p-2 focus:outline-none">
@@ -303,7 +304,7 @@
                 const itemElement = document.createElement('div');
                 itemElement.className = 'flex justify-between py-1';
                 itemElement.innerHTML = `
-                    <span>₱${item.name} (₱${item.quantity}x)</span>
+                    <span>${item.name} (${item.quantity}x)</span>
                     <span>₱${(item.price * item.quantity).toFixed(2)}</span>
                 `;
                 receiptItemsContainer.appendChild(itemElement);
@@ -331,4 +332,3 @@
     </script>
 </body>
 </html>
-
