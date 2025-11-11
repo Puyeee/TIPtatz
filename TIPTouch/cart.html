@@ -7,16 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/feather-icons"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-        body {
-            font-family: 'Poppins', sans-serif;
-        }
-        .checkout-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-gray-200">
     <!-- Navigation -->
@@ -88,16 +79,16 @@
                         <div class="p-6">
                             <div class="flex justify-between mb-2">
                                 <span class="text-gray-600">Subtotal</span>
-                                <span id="subtotal">$0.00</span>
+                                <span id="subtotal">₱0.00</span>
                             </div>
                             <div class="flex justify-between mb-4">
                                 <span class="text-gray-600">Tax (8%)</span>
-                                <span id="tax">$0.00</span>
+                                <span id="tax">₱0.00</span>
                             </div>
                             <div class="border-t border-gray-200 pt-4 mb-6">
                                 <div class="flex justify-between font-semibold text-lg">
                                     <span>Total</span>
-                                    <span id="total">$0.00</span>
+                                    <span id="total">₱0.00</span>
                                 </div>
                             </div>
                             <button id="checkout-btn" class="w-full bg-yellow-400 text-black py-3 px-4 rounded-lg font-semibold hover:bg-yellow-100 transition duration-300 checkout-btn hidden">
@@ -135,7 +126,7 @@
                     <div id="receipt-items" class="mb-4"></div>
                     <div class="flex justify-between font-semibold text-lg">
                         <span>Total</span>
-                        <span id="receipt-total">$0.00</span>
+                        <span id="receipt-total">₱0.00</span>
                     </div>
                 </div>
                 <button onclick="closeReceipt()" class="w-full bg-yellow-400 text-black py-3 px-4 rounded-lg font-semibold hover:bg-yellow-100 transition duration-300">
@@ -237,9 +228,9 @@
                     <div class="flex-1">
                         <div class="flex justify-between">
                             <h3 class="text-lg font-medium text-gray-900">${item.name}</h3>
-                            <p class="text-lg font-semibold">$${(item.price * item.quantity).toFixed(2)}</p>
+                            <p class="text-lg font-semibold">₱${(item.price * item.quantity).toFixed(2)}</p>
                         </div>
-                        <p class="mt-1 text-gray-500">$${item.price.toFixed(2)} each</p>
+                        <p class="mt-1 text-gray-500">${item.price.toFixed(2)} each</p>
                         <div class="mt-4 flex items-center">
                             <button onclick="updateQuantity(${index}, -1)" class="text-gray-500 hover:text-indigo-600">
                                 <i data-feather="minus" class="w-4 h-4"></i>
@@ -279,9 +270,9 @@
             const tax = subtotal * 0.08;
             const total = subtotal + tax;
             
-            document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
-            document.getElementById('tax').textContent = `$${tax.toFixed(2)}`;
-            document.getElementById('total').textContent = `$${total.toFixed(2)}`;
+            document.getElementById('subtotal').textContent = `₱${subtotal.toFixed(2)}`;
+            document.getElementById('tax').textContent = `₱${tax.toFixed(2)}`;
+            document.getElementById('total').textContent = `₱${total.toFixed(2)}`;
             updateCartCount();
         }
         
@@ -305,15 +296,15 @@
             const tax = subtotal * 0.08;
             const total = subtotal + tax;
             
-            document.getElementById('receipt-total').textContent = `$${total.toFixed(2)}`;
+            document.getElementById('receipt-total').textContent = `₱${total.toFixed(2)}`;
             
             receiptItemsContainer.innerHTML = '';
             cart.forEach(item => {
                 const itemElement = document.createElement('div');
                 itemElement.className = 'flex justify-between py-1';
                 itemElement.innerHTML = `
-                    <span>${item.name} (${item.quantity}x)</span>
-                    <span>$${(item.price * item.quantity).toFixed(2)}</span>
+                    <span>₱${item.name} (₱${item.quantity}x)</span>
+                    <span>₱${(item.price * item.quantity).toFixed(2)}</span>
                 `;
                 receiptItemsContainer.appendChild(itemElement);
             });
@@ -322,7 +313,7 @@
             taxElement.className = 'flex justify-between py-1 border-t border-gray-200 mt-2 pt-2';
             taxElement.innerHTML = `
                 <span>Tax (8%)</span>
-                <span>$${tax.toFixed(2)}</span>
+                <span>₱${tax.toFixed(2)}</span>
             `;
             receiptItemsContainer.appendChild(taxElement);
             
